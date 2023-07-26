@@ -1,26 +1,17 @@
 import math
 
-# The Tic-Tac-Toe board is represented as a 3x3 list
-# Empty cells are represented by ' '
-# AI player is 'X' and the human player is 'O'
-
 def print_board(board):
     for row in board:
         print('|'.join(row))
         print('-' * 5)
 
 def evaluate(board):
-    # Checking rows for victory
     for row in board:
         if row.count(row[0]) == 3 and row[0] != ' ':
             return 1 if row[0] == 'X' else -1
-
-    # Checking columns for victory
     for col in range(3):
         if board[0][col] == board[1][col] == board[2][col] and board[0][col] != ' ':
             return 1 if board[0][col] == 'X' else -1
-
-    # Checking diagonals for victory
     if board[0][0] == board[1][1] == board[2][2] and board[0][0] != ' ':
         return 1 if board[0][0] == 'X' else -1
 
@@ -90,8 +81,6 @@ def play():
         print_board(board)
         if is_full(board) or evaluate(board) != 0:
             break
-
-        # Human player's turn
         row = int(input('Enter the row number (0-2): '))
         col = int(input('Enter the column number (0-2): '))
         if board[row][col] == ' ':
