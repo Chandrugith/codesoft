@@ -3,8 +3,6 @@ import torch.nn as nn
 import torchvision.models as models
 import torchvision.transforms as transforms
 from torch.nn.utils.rnn import pack_padded_sequence
-
-# Define the image captioning model
 class ImageCaptioningModel(nn.Module):
     def __init__(self, embed_size, hidden_size, vocab_size, num_layers):
         super(ImageCaptioningModel, self).__init__()
@@ -26,8 +24,6 @@ class ImageCaptioningModel(nn.Module):
         hiddens, _ = self.lstm(packed_embeddings)
         outputs = self.fc(hiddens[0])
         return outputs
-
-# Hyperparameters and configurations
 embed_size = 256
 hidden_size = 512
 vocab_size = 10000 # Adjust according to your vocabulary size
@@ -36,30 +32,19 @@ learning_rate = 0.001
 num_epochs = 10
 batch_size = 32
 
-# Data preprocessing and loading
-# TODO: Implement data loading and preprocessing steps here
-
-# Initialize the model
 model = ImageCaptioningModel(embed_size, hidden_size, vocab_size, num_layers)
 
-# Define the loss function and optimizer
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-# Training loop
 total_step = len(data_loader)
 for epoch in range(num_epochs):
     for i, (images, captions, lengths) in enumerate(data_loader):
-        # Forward pass
         outputs = model(images, captions, lengths)
         targets = pack_padded_sequence(captions, lengths, batch_first=True)[0]
         loss = criterion(outputs, targets)
-
-        # Backward and optimize
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-
-        # Print log info
         if (i + 1) % 100 == 0:
             print(f'Epoch [{epoch + 1}/{num_epochs}], Step [{i + 1}/{total_step}], Loss: {loss.item():.4f}')
